@@ -146,46 +146,8 @@ export class ChromeConnection {
     }
 
     public _attach(port: number, url?: string): Promise<void> {
-        return utils.getURL(`http://127.0.0.1:${port}/json`).then(jsonResponse => {
-            // Validate every step of processing the response
-            try {
-                const responseArray = JSON.parse(jsonResponse);
-                if (Array.isArray(responseArray)) {
-                    // Filter out extension targets and other things
-                    // Non-chrome scenarios don't always specify a type, so filter to include ones without a type at all
-                    let pages = responseArray.filter(target => target && (!target.type || target.type === 'page'));
-
-                    // If a url was specified (launch mode), try to filter to that url
-                    if (url) {
-                        url = utils.canonicalizeUrl(url).toLowerCase();
-                        const urlPages = pages.filter(page => utils.canonicalizeUrl(page.url) === url);
-                        if (!urlPages.length) {
-                            logger.log(`Warning: Can't find a page with url: ${url}. Available pages: ${JSON.stringify(pages.map(page => page.url))}`, logger.LogLevel.Error, true);
-                        } else {
-                            pages = urlPages;
-                        }
-                    }
-
-                    if (pages.length) {
-                        if (pages.length > 1) {
-                            logger.log('Warning: Found more than one valid target page. Attaching to the first one. Available pages: ' + JSON.stringify(pages.map(page => page.url)), logger.LogLevel.Error, true);
-                        }
-
-                        const wsUrl = pages[0].webSocketDebuggerUrl;
-                        if (wsUrl) {
-                            return this._socket.attach(wsUrl);
-                        }
-                    }
-                }
-            } catch (e) {
-                // JSON.parse can throw
-            }
-
-            return utils.errP('Got response from target app, but no valid target pages found');
-        },
-        e => {
-            return utils.errP('Cannot connect to the target: ' + e.message);
-        });
+// PJS : we should be able to connect to the phantom's websocket immediately
+        return new Promise<void>((resolve, reject) => { resolve(this._socket.attach("ws://127.0.0.1:9222/devtools/page/1")); });
     }
 
     public close(): void {

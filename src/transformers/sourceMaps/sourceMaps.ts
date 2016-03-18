@@ -12,6 +12,8 @@ import * as PathUtils from './pathUtilities';
 import * as utils from '../../utils';
 import * as logger from '../../logger';
 
+import {PJS} from '../../PJS';
+
 export interface MappingResult {
 	path: string;
 	line: number;
@@ -76,7 +78,7 @@ export class SourceMaps implements ISourceMaps {
 		const map = this._findSourceToGeneratedMapping(pathToSource);
 		if (map) {
 			line += 1;	// source map impl is 1 based
-			const mr = map.generatedPositionFor(pathToSource, line, column);
+			const mr = map.generatedPositionFor(pathToSource, line, column, PJS.DefaultBias);
 			if (typeof mr.line === 'number') {
 				if (SourceMaps.TRACE) console.error(`${Path.basename(pathToSource)} ${line}:${column} -> ${mr.line}:${mr.column}`);
 				return { path: map.generatedPath(), line: mr.line-1, column: mr.column};
@@ -89,7 +91,7 @@ export class SourceMaps implements ISourceMaps {
 		const map = this._generatedToSourceMaps[pathToGenerated];
 		if (map) {
 			line += 1;	// source map impl is 1 based
-			const mr = map.originalPositionFor(line, column);
+			const mr = map.originalPositionFor(line, column, PJS.DefaultBias);
 			if (mr.source) {
 				if (SourceMaps.TRACE) console.error(`${Path.basename(pathToGenerated)} ${line}:${column} -> ${mr.line}:${mr.column}`);
 				return { path: mr.source, line: mr.line-1, column: mr.column};

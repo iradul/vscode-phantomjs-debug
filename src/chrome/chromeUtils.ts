@@ -6,6 +6,8 @@ import * as url from 'url';
 import * as path from 'path';
 import * as Utils from '../utils';
 
+import {PJS} from '../PJS';
+
 /**
  * Maps a url from target to an absolute local path.
  * If not given an absolute path (with file: prefix), searches the current working directory for a matching file.
@@ -49,7 +51,7 @@ export function targetUrlToClientPath(webRoot: string, aUrl: string): string {
         pathParts.shift();
     }
 
-    return '';
+    return PJS.targetUrlToClientPath(webRoot, aUrl, Utils.existsSync);
 }
 
 /**

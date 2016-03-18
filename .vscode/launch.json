@@ -10,15 +10,6 @@
             "args": [ "--server=4712" ],
             "sourceMaps": true,
             "outDir": "${workspaceRoot}/out"
-        },
-        {
-            "name": "test",
-            "type": "node",
-            "program": "${workspaceRoot}/node_modules/gulp/bin/gulp.js",
-            "stopOnEntry": false,
-            "args": [ "test" ],
-            "sourceMaps": true,
-            "outDir": "${workspaceRoot}/out"
         }
     ]
 }

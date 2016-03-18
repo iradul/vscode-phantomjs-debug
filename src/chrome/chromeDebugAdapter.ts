@@ -17,6 +17,8 @@ import {formatConsoleMessage} from './consoleHelper';
 import {spawn, ChildProcess} from 'child_process';
 import * as path from 'path';
 
+import {PJS} from '../PJS';
+
 interface IScopeVarHandle {
     objectId: string;
     thisObj?: Chrome.Runtime.RemoteObject;
@@ -89,21 +91,27 @@ export class ChromeDebugAdapter implements IDebugAdapter {
 
         // Start with remote debugging enabled
         const port = args.port || 9222;
-        const chromeArgs: string[] = ['--remote-debugging-port=' + port];
+// PJS : uses remote-debugger-port
+        const chromeArgs: string[] = ["--remote-debugger-port=" + port];
 
+/* PJS : useless
         // Also start with extra stuff disabled
         chromeArgs.push(...['--no-first-run', '--no-default-browser-check']);
+*/
         if (args.runtimeArgs) {
             chromeArgs.push(...args.runtimeArgs);
         }
-
+/* PJS : useless
         if (args.userDataDir) {
             chromeArgs.push('--user-data-dir=' + args.userDataDir);
         }
+*/
 
         let launchUrl: string;
         if (args.file) {
-            launchUrl = utils.pathToFileURL(args.file);
+// PJS : this is the best chance to get basename of the running phantomjs script
+            launchUrl = path.resolve(args.file);
+            PJS.setInitialURL(path.basename(launchUrl));
         } else if (args.url) {
             launchUrl = args.url;
         }
@@ -215,6 +223,8 @@ export class ChromeDebugAdapter implements IDebugAdapter {
     }
 
     private onDebuggerPaused(notification: Chrome.Debugger.PausedParams): void {
+// PJS : phantomjs adds special __run function to the main script which pushes original source code by one line, got to fix this:
+        PJS.debuggerPaused(notification);
 
         this._overlayHelper.doAndCancel(() => this._chromeConnection.page_setOverlayMessage(ChromeDebugAdapter.PAGE_PAUSE_MESSAGE));
         this._currentStack = notification.callFrames;
@@ -244,7 +254,8 @@ export class ChromeDebugAdapter implements IDebugAdapter {
                 this._currentStack[0].scopeChain.unshift({ type: 'Exception', object: scopeObject });
             }
         } else {
-            reason = (notification.hitBreakpoints && notification.hitBreakpoints.length) ? 'breakpoint' : 'step';
+// PJS : phantomjs is good with just a 'breakpoint'
+            reason = 'breakpoint';
         }
 
         this.fireEvent(new StoppedEvent(reason, /*threadId=*/ChromeDebugAdapter.THREAD_ID, exceptionText));
@@ -269,6 +280,9 @@ export class ChromeDebugAdapter implements IDebugAdapter {
         if (!this.isExtensionScript(script)) {
             this.fireEvent(new Event('scriptParsed', { scriptUrl: script.url, sourceMapURL: script.sourceMapURL }));
         }
+
+// PJS : report that script was parsed
+        PJS.scriptParsed(script, this);
     }
 
     private onBreakpointResolved(params: Chrome.Debugger.BreakpointResolvedParams): void {
@@ -304,6 +318,9 @@ export class ChromeDebugAdapter implements IDebugAdapter {
     }
 
     public setBreakpoints(args: ISetBreakpointsArgs): Promise<ISetBreakpointsResponseBody> {
+// PJS : phantom's initial script is corrupted with __run wrapper, got to fix those breakpoint lines:
+        PJS.setBreakpoints(args);
+
         let targetScriptUrl: string;
         if (args.source.path) {
             targetScriptUrl = args.source.path;
@@ -382,6 +399,9 @@ export class ChromeDebugAdapter implements IDebugAdapter {
                         column: 0
                     };
                 }
+
+// PJS : we need to transfor breakpoints
+                PJS._chromeBreakpointResponsesToODPBreakpoints(url, response);
 
                 return <IBreakpoint>{
                     verified: true,

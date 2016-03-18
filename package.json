@@ -1,15 +1,14 @@
 {
-  "name": "debugger-for-chrome",
-  "displayName": "Debugger for Chrome",
-  "version": "0.2.5",
+  "name": "debugger-for-phantomjs",
+  "displayName": "Debugger for PhantomJS",
+  "version": "0.0.1",
   "icon": "images/icon.png",
-  "description": "Debug your JavaScript code in the Chrome browser, or any other target that supports the Chrome Debugger protocol.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Microsoft/vscode-chrome-debug"
+    "url": "https://github.com/iradul/vscode-phantomjs-debug"
   },
-  "publisher": "msjsdiag",
-  "bugs": "https://github.com/microsoft/vscode-chrome-debug/issues",
+  "publisher": "iradul",
+  "bugs": "https://github.com/iradul/vscode-phantomjs-debug/issues",
   "engines": {
     "vscode": "*"
   },
@@ -39,14 +38,11 @@
     "tslint": "^2.5.1",
     "typescript": "^1.8.9"
   },
-  "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha --recursive -u tdd ./out/test/"
-  },
   "contributes": {
     "debuggers": [
       {
-        "type": "chrome",
-        "label": "Chrome",
+        "type": "phantomjs",
+        "label": "PhantomJS",
         "enableBreakpointsFor": {
           "languageIds": [
             "javascript",
@@ -57,28 +53,15 @@
         "runtime": "node",
         "initialConfigurations": [
           {
-            "name": "Launch index.html with sourcemaps",
-            "type": "chrome",
+            "name": "Launch",
+            "type": "phantomjs",
             "request": "launch",
-            "file": "${workspaceRoot}/index.html",
+            "file": "${workspaceRoot}/app.js",
+            "runtimeExecutable": "${workspaceRoot}/phantomjs.exe",
+            "runtimeArgs": [],
             "sourceMaps": true,
-            "webRoot": "${workspaceRoot}"
-          },
-          {
-            "name": "Launch localhost with sourcemaps",
-            "type": "chrome",
-            "request": "launch",
-            "url": "http://localhost:8080",
-            "sourceMaps": true,
-            "webRoot": "${workspaceRoot}"
-          },
-          {
-            "name": "Attach with sourcemaps",
-            "type": "chrome",
-            "request": "attach",
-            "port": 9222,
-            "sourceMaps": true,
-            "webRoot": "${workspaceRoot}"
+            "webRoot": "${workspaceRoot}",
+            "diagnosticLogging": false
           }
         ],
         "configurationAttributes": {
