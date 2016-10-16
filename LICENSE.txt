@@ -1,4 +1,4 @@
-VS Code - Debugger for Chrome
+VS Code - Debugger for PhantomJS
 
 Copyright (c) Microsoft Corporation
 

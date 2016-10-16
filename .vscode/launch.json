@@ -4,12 +4,14 @@
         {
             "name": "launch as server",
             "type": "node",
-            "program": "${workspaceRoot}/out/src/chrome/chromeDebug.js",
-			"runtimeArgs": ["--harmony"],
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "program": "${workspaceRoot}/jsrc/phantomjsDebug.js",
+            "runtimeArgs": ["--harmony"],
             "stopOnEntry": false,
             "args": [ "--server=4712" ],
             "sourceMaps": true,
-            "outDir": "${workspaceRoot}/out"
+            "outDir": "${workspaceRoot}/jsrc"
         }
     ]
 }

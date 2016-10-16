@@ -20,8 +20,8 @@ Open your working directory in VSC. This can be done from menu or from console b
 Setup up VSC debugger:
  - click Debug button or press CTRL+SHIFT+D
  - create launch.json file manualy under ./.vscode/launch.json or by clicking on the small button that looks like cog then pick PhantomJS from the list that will open up
- 
-![alt creating launch.json](https://cloud.githubusercontent.com/assets/2411422/15265900/df27964c-1960-11e6-9327-b4f30b9c4545.png) 
+
+![alt creating launch.json](https://cloud.githubusercontent.com/assets/2411422/15265900/df27964c-1960-11e6-9327-b4f30b9c4545.png)
  - edit launch.json by specifying :
    - full path to PhantomJS executable that you previously downloaded - `runtimeExecutable`
    - full path to PhantomJS JavaScript entrypoint file - `file`
@@ -32,19 +32,20 @@ If you write your code in TypeScript set `sourceMaps` to `true`. Also note that 
 If you are using PhantomJS modules you should put those in `node_modules` directory which should be child of your `webRoot` directory so that debugger can pick them up.
 ```json
 {
-    "version": "0.1.0",
-	"configurations": [
-		{
-			"name": "Launch",
-			"type": "phantomjs",
-			"request": "launch",
-			"file": "${workspaceRoot}/test.js",
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch",
+            "type": "phantomjs",
+            "request": "launch",
+            "file": "${workspaceRoot}/test.js",
             "webRoot": "${workspaceRoot}",
-			"runtimeExecutable": "${workspaceRoot}/phantomjs.exe",
-			"runtimeArgs": [],
-			"sourceMaps": true
-		}
-	]
+            "runtimeExecutable": "${workspaceRoot}/phantomjs.exe",
+            "runtimeArgs": [],
+            "scriptArgs": [],
+            "sourceMaps": true
+        }
+    ]
 }
 ```
 
