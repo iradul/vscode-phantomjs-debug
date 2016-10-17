@@ -106,6 +106,14 @@
                 },
                 "default": []
               },
+              "scriptArgs": {
+                "type": "array",
+                "description": "Arguments passed to the PhantomJS script.",
+                "items": {
+                  "type": "string"
+                },
+                "default": []
+              },
               "sourceMaps": {
                 "type": "boolean",
                 "description": "Use JavaScript source maps (if they exist).",
