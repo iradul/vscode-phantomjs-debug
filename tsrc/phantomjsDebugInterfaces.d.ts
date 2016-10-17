@@ -6,4 +6,5 @@ export interface ILaunchRequestArgs extends Core.ILaunchRequestArgs {
     file?: string;
     address?: string;
     port?: number;
+    env?: string;
 }

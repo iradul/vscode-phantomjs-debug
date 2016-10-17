@@ -159,6 +159,7 @@ export class PhantomJSDebugAdapter extends ChromeDebugAdapter {
             logger.log(`spawn('${pathToExecutable}', ${JSON.stringify(pjsArgs) })`);
             this._phantomJsProcess = spawn(pathToExecutable, pjsArgs, {
                 detached: true,
+                env: args.env,
                 stdio: ['ignore'],
             });
             this._phantomJsProcess.unref();
