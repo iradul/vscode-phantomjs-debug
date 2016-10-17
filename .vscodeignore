@@ -1,0 +1,7 @@
+**/*.ts
+**/*.map
+.vscode/**
+tsrc/**
+*.vsix
+tsconfig.json
+tslint.json
