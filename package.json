@@ -37,6 +37,7 @@
     "typescript": "^2.0.3"
   },
   "scripts": {
+    "vscode:prepublish": "tsc",
     "lint": "tslint -t verbose 'tsrc/**/*.ts'",
     "build": "tsc",
     "watch": "tsc -w"
