@@ -14,7 +14,8 @@ let allPaths: string[] = undefined;
 function getAllDirectories(srcdir: string, maxlvl: number, lvl = 1) {
     if (lvl > maxlvl) return;
     allPaths.push(srcdir);
-    const dirs = fs.readdirSync(srcdir).filter((fileOrDir) => fs.statSync(path.join(srcdir, fileOrDir)).isDirectory());
+    const dirs = fs.readdirSync(srcdir).filter((fileOrDir) => fs.statSync(path.join(srcdir, fileOrDir)).isDirectory())
+        .map((dir) => path.join(srcdir, dir));
     dirs.forEach((dir) => getAllDirectories(dir, maxlvl, lvl + 1));
 }
 
