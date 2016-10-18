@@ -1,7 +1,7 @@
 {
   "name": "debugger-for-phantomjs",
   "displayName": "Debugger for PhantomJS",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "icon": "icon.png",
   "description": "Debug your JavaScript code in the PhantomJS browser, or any other target that supports the PhantomJS Debugger protocol.",
   "author": {
